@@ -5,16 +5,16 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Planer_Dnia.MainWindow"
         Title="Planer_Dnia">
-    <Grid>
+    <Grid Background="#977260">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <TextBlock Grid.Row="0">Planer Dnia</TextBlock>
+        <TextBlock Grid.Row="0" TextAlignment="Center" FontSize="30">Planer Dnia</TextBlock>
         
         
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="SaddleBrown">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
@@ -22,23 +22,64 @@
             </Grid.RowDefinitions>
             
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
             <!-- Row 1 -->
-            <TextBox Grid.Row="0" Grid.Column="0"></TextBox>
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TextBoxTaskName" Margin="15" Padding="5" Watermark="Wpisz swoje imię"/>
             
-            <ComboBox Grid.Row="0" Grid.Column="1"></ComboBox>
+            <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ComboBoxTaskType" Margin="15" Padding="5" MinWidth="150">
+                <ComboBoxItem Content="Praca" />
+                <ComboBoxItem Content="Zakupy" />
+                <ComboBoxItem Content="Relaks" />
+                <ComboBoxItem Content="Rodzina" />
+                <ComboBoxItem Content="Znajomi" />
+                <ComboBoxItem Content="Inne" />
+            </ComboBox>
             
-            <Button Grid.Row="0" Grid.Column="2" />
+            <Button Grid.Row="0" Grid.Column="2" x:Name="ButtonTaskSend" Margin="15" Padding="5"
+                    Content="Dodaj zadanie" Background="ForestGreen" />
             
             
             <!-- Lista Zadań -->
+            <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Background="Moccasin">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+            
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+            
+                <!-- Row 1 -->
+                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="TextBox2TaskName" Margin="15" Padding="5"/>
+            
+                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ComboBox2ChangeTaskType" Margin="15" Padding="5" MinWidth="120">
+                    <ComboBoxItem Content="Praca" />
+                    <ComboBoxItem Content="Zakupy" />
+                    <ComboBoxItem Content="Relaks" />
+                    <ComboBoxItem Content="Rodzina" />
+                    <ComboBoxItem Content="Znajomi" />
+                    <ComboBoxItem Content="Inne" />
+                </ComboBox>
+                
+                <CheckBox Grid.Row="0" Grid.Column="2" x:Name="CheckBoxIsFinished" Margin="15" Padding="15, 5"
+                          HorizontalAlignment="Left" Content="Zakończone" />
+            
+                <Button Grid.Row="0" Grid.Column="2" x:Name="Button2TaskDelete" Margin="15" Padding="15, 5"
+                        HorizontalAlignment="Right" Content="Usuń zadanie" Background="Firebrick" />
+            </Grid>
             
             
-            <TextBlock Grid.Row="2" Grid.Column="0"></TextBlock>
+            <!-- Row 3 - Podsumowanie -->
+            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="TextBlockTaskNumber"
+                       TextAlignment="Center" Text="Liczba zadań: 0, Zakończone zadania: 0" />
         </Grid>
     </Grid>
 </Window>
