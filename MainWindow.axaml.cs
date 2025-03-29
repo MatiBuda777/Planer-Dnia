@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -29,18 +32,16 @@ public partial class MainWindow : Window
             Text = task.Name,
             Margin = new Thickness(15, 5, 5, 5)
         };
+        
+        // Lista typów zadań
+        var taskTypes = new ObservableCollection<string> { "Praca", "Hobby", "Zakupy", "Relaks", "Rozrywka", "Rodzina", "Znajomi", "Inne" };
 
         var taskTypeComboBox = new ComboBox // lista do zmiany typu zadania
         {
             SelectedItem = task.Type,
-            Margin = new Thickness(15, 5, 5, 5)
+            Margin = new Thickness(15, 5, 5, 5),
+            ItemsSource = taskTypes // Ustawienie źródła elementów
         };
-        
-        // Dodanie każdego elementu do listy (tej do zmiany typu zadania)
-        foreach (var item in ComboBoxTaskType.Items)
-        {
-            taskTypeComboBox.Items.Add(item);
-        }
 
         var finishedCheckBox = new CheckBox
         {
@@ -48,6 +49,8 @@ public partial class MainWindow : Window
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness(15, 5, 5, 5)
         };
+        
+        finishedCheckBox.Click += (_, _) =>  UpdateTaskSummary();
 
         var deleteButton = new Button
         {
@@ -63,6 +66,7 @@ public partial class MainWindow : Window
             TaskGrid.Children.Remove(taskTypeComboBox);
             TaskGrid.Children.Remove(finishedCheckBox);
             TaskGrid.Children.Remove(deleteButton);
+            TaskGrid.RowDefinitions.Remove(TaskGrid.RowDefinitions[newRowIndex]);
             UpdateTaskSummary();
         };
         
@@ -84,22 +88,38 @@ public partial class MainWindow : Window
         Grid.SetColumn(finishedCheckBox, 2);
         Grid.SetColumn(deleteButton, 2);
     }
-
+    
+    private int CountCheckedTasks()
+    {
+        int count = 0;
+        foreach (var child in TaskGrid.Children)
+        {
+            if (child is CheckBox { IsChecked: true })
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    
     private void UpdateTaskSummary()
     {
-        
+        int numOfTasks = TaskGrid.RowDefinitions.Count;
+        int numOfTasksFinished = CountCheckedTasks();
+        TextBlockTaskNumber.Text = $"Liczba zadań: {numOfTasks}, Zakończone zadania: {numOfTasksFinished}";
     }
     
     private void OnButtonClick(object? sender, RoutedEventArgs e)
     {
         string TaskName = TextBoxTaskName.Text;
         string TaskType = (ComboBoxTaskType.SelectedItem as ComboBoxItem)?.Content.ToString();
-
+        
         if (string.IsNullOrWhiteSpace(TaskName) || string.IsNullOrWhiteSpace(TaskType))
         {
-            TextBlockTaskNumber.Text = "Wypełnij puste pola.";
+            EmptyWarningTextBlock.Text = "Wypełnij puste pola.";
             return;
         }
+        EmptyWarningTextBlock.Text = "";
 
         Task newTask = new Task()
         {
@@ -107,7 +127,8 @@ public partial class MainWindow : Window
             Type = TaskType
         };
 
-        AddTaskToGrid(newTask); // Nie działa?
+        AddTaskToGrid(newTask);
+        UpdateTaskSummary();
         
         TextBoxTaskName.Clear();
         ComboBoxTaskType.SelectedIndex = -1;
