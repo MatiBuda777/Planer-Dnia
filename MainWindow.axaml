@@ -54,6 +54,8 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="15"/>
             </Grid>
             
             

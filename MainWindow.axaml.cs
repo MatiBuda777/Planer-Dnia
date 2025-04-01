@@ -62,11 +62,22 @@ public partial class MainWindow : Window
 
         deleteButton.Click += (sender, e) =>
         {
+            int rowIndex = Grid.GetRow(taskNameTextBlock);
+            
             TaskGrid.Children.Remove(taskNameTextBlock);
             TaskGrid.Children.Remove(taskTypeComboBox);
             TaskGrid.Children.Remove(finishedCheckBox);
             TaskGrid.Children.Remove(deleteButton);
-            TaskGrid.RowDefinitions.Remove(TaskGrid.RowDefinitions[newRowIndex]);
+            TaskGrid.RowDefinitions.RemoveAt(newRowIndex);
+            
+            for (int i = rowIndex; i < TaskGrid.RowDefinitions.Count; i++)
+            {
+                // Zaktualizuj indeksy wierszy dla każdej kontrolki w tym wierszu
+                foreach (var child in TaskGrid.Children)
+                {
+                    if (Grid.GetRow(child) == i + 1) { Grid.SetRow(child, i); }
+                }
+            }
             UpdateTaskSummary();
         };
         
